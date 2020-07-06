@@ -1,40 +1,20 @@
-from PIL import Image
+from turtle import*
+import numpy as np
 
-
-# def roll(image, delta):
-#     "Roll an image sideways"
-#
-#     xsize, ysize = image.size
-#
-#     delta = delta % xsize
-#     if delta == 0: return image
-#
-#     part1 = image.crop((0, 0, delta, ysize))
-#     part2 = image.crop((delta, 0, xsize, ysize))
-#     part1.load()
-#     part2.load()
-#     image.paste(part2, (0, 0, xsize - delta, ysize))
-#     image.paste(part1, (xsize - delta, 0, xsize, ysize))
-#     return image
-
-# im = Image.open("mtl.jpg")
-# box = (100, 100, 400, 400)
-region = Image.open("part.jpg")
-region = region.resize((400, 400))
-region = region.rotate(45)
-# xsize, ysize = region.size
-# delta = 90
-# delta = delta % xsize
-#
-# part1 = region.crop((0, 0, delta, ysize))
-# part2 = region.crop((delta, 0, xsize, ysize))
-# part1.load()
-# part2.load()
-# region.paste(part2, (0, 0, xsize - delta, ysize))
-# region.paste(part1, (xsize - delta, 0, xsize, ysize))
-# region = region.transpose(Image.ROTATE_180)
-# im.paste(region, box)
-
-
-region.show()
-# im.show()
+br = 140
+r = 80
+angle = 60
+times = int(360 / angle)
+angle = 360 / times
+inner_range = br * np.cos(angle / 2 * np.pi / 180) - np.sqrt(r * r - (br * br * np.sin(angle / 2 * np.pi / 180) * np.sin(angle / 2 * np.pi / 180)))
+heading_angle = np.arccos((br * br + r * r - inner_range * inner_range) / (2 * br * r))
+# up()
+goto(0, -br)
+circle(br)
+nextangle = -90
+down()
+for _ in range(3 * int(times)):
+    setheading(nextangle + 90 - heading_angle)
+    circle(r, 2 * (angle + inner_range))
+    nextangle += angle
+done()
