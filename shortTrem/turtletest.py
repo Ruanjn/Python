@@ -19,9 +19,6 @@ def arc(r, angle):
     n = int(arc_length / 4) + 1
     step_length = arc_length / n
     step_angle = float(angle) / n
-
-    # making a slight left turn before starting reduces
-    # the error caused by the linear approximation of the arc
     lt(step_angle/2)
     polyline(n, step_length, step_angle)
     rt(step_angle/2)
@@ -34,6 +31,7 @@ def petal(r, angle):
 
 
 def flower(n, r, angle):
+    down()
     for i in range(n):
         petal(r, angle)
         lt(360.0/n)
@@ -48,7 +46,7 @@ def move(length):
 def draw_pie(n, r):
     polypie(n, r)
     pu()
-    fd(r*2 + 10)
+    # fd(r*2 + 10)
     pd()
 
 
@@ -61,7 +59,6 @@ def polypie(n, r):
 
 def isosceles(r, angle):
     y = r * math.sin(angle * math.pi / 180)
-
     rt(angle)
     fd(r)
     lt(90+angle)
@@ -89,25 +86,27 @@ def c(r, x, y):
 
 def dot_circle(r):
     up()
-    goto(0,0)
+    goto(0, 0)
     down()
     dot(r)
 
 
-def flowes(br, r, angle):
-    times = int(360/angle)
+def out_flower(br, r, times):
     angle = 360/times
+    if r < br*np.sin(angle/2*np.pi/180):
+        return
     inner_range = br*np.cos(angle/2*np.pi/180)-np.sqrt(r*r-(br*br*np.sin(angle/2*np.pi/180)*np.sin(angle/2*np.pi/180)))
-    heading_angle = np.arccos((br*br+r*r-inner_range*inner_range)/(2*br*r))
-    # up()
+    heading_angle = np.arccos((br*br+r*r-inner_range*inner_range)/(2*br*r))*180/np.pi
+    up()
     goto(0, -br)
     # circle(br)
-    nextangle = -90
+    next_angle = -90
     down()
     for _ in range(3 * int(times)):
-        setheading(nextangle+90-heading_angle)
-        circle(r, 2*(angle+inner_range))
-        nextangle += angle
+        setheading(next_angle+90-heading_angle)
+        circle(r, angle+2*heading_angle)
+        next_angle += angle
+    up()
 
 
 def wheel(br, inter, angle, model):
@@ -147,47 +146,51 @@ def sunflowe_line(n, x, y):
         # print(position())
         left(y)
 
-# hideturtle()
+hideturtle()
 pensize(2)
 # print(position()[0])
 tracer(5, 10)
 speed(11)
-# flower(140, 80, 40)
-move(-100)
-flower(7, 60.0, 60.0)
+out_flower(140, 100, 20)
+# move(-100)
+goto(0, 0)
+flower(4, 120.0, 120.0)
 
-move(100)
-flower(10, 40.0, 80.0)
+# move(100)
+# flower(10, 40.0, 80.0)
 
-move(100)
-flower(20, 240.0, 20.0)
-size = 40
-draw_pie(5, size)
+# move(100)
+# flower(20, 240.0, 20.0)
+# move(100)
+size = 90
+# draw_pie(5, size)
 draw_pie(6, size)
-draw_pie(7, size)
-draw_pie(8, size)
+# draw_pie(7, size)
+# draw_pie(8, size)
 # print(np.sin(30*np.pi/180))
-# wheel(140, 70, 12, 2)
+wheel(150, 20, 12, 2)
+# wheel(200, 50, 12, 1)
 # sunflowe_line(50, 150, 12)
-# dot_circle(15)
-#
-# setheading(0)
-# goto(0, 0)
-# square(-170, 170)
-# right(45)
-# square(0, 240)
-# c(240, -170, -170)
-# left(45)
-# up()
-# goto(0, -200)
-# down()
+dot_circle(15)
+
+setheading(0)
+goto(0, 0)
+square(-170, 170)
+right(45)
+square(0, 240)
+c(240, -170, -170)
+left(45)
+up()
+goto(0, -200)
+down()
 # circle(200, 360, 3)
 # c(170, 0, -170)
 # c(155, 0, -155)
 # c(100, 0, -100)
 # c(85, 0, -85)
-# c(15, 0, -15)
-# c(255, 0, -255)
+c(15, 0, -15)
+c(255, 0, -255)
+# hideturtle()
 done()
 
 
